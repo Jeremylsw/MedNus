@@ -7,7 +7,7 @@ import org.junit.Test;
 public class MessageTest {
 
     @Test
-    public void testMessageClass(){
+    public void testMessageClass() {
         Messages messageClass = new Messages();
 
         assertTrue("Unknown command".equals(messageClass.MESSAGE_UNKNOWN_COMMAND));
