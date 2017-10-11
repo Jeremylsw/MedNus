@@ -16,7 +16,7 @@ import seedu.address.commons.util.CollectionUtil;
 
 /**
  * A list of tags that enforces no nulls and uniqueness between its elements.
- *
+ * <p>
  * Supports minimal set of list operations for the app's features.
  *
  * @see Tag#equals(Object)
@@ -26,15 +26,17 @@ public class UniqueTagList implements Iterable<Tag> {
     private static Random random = new Random(123);
     private static boolean tagColorOn;
     private final ObservableList<Tag> internalList = FXCollections.observableArrayList();
+
     /**
      * Constructs empty TagList.
      */
-    public UniqueTagList() {}
+    public UniqueTagList() {
+    }
 
     /**
      * Creates a UniqueTagList using given tags.
      * Enforces no nulls.
-     *
+     * <p>
      * Assign each tag with a unique color
      */
     public UniqueTagList(Set<Tag> tags) {
@@ -132,7 +134,7 @@ public class UniqueTagList implements Iterable<Tag> {
         assert CollectionUtil.elementsAreUnique(internalList);
         return other == this // short circuit if same object
                 || (other instanceof UniqueTagList // instanceof handles nulls
-                        && this.internalList.equals(((UniqueTagList) other).internalList));
+                && this.internalList.equals(((UniqueTagList) other).internalList));
     }
 
     /**
@@ -170,7 +172,6 @@ public class UniqueTagList implements Iterable<Tag> {
 
     /**
      * Converts a color to hexadecimal string
-     *
      */
     private static String convertColorToHexadecimal(Color color) {
         String hex = Integer.toHexString(color.getRGB() & 0xffffff);
@@ -187,6 +188,13 @@ public class UniqueTagList implements Iterable<Tag> {
         }
         hex = "#" + hex;
         return hex;
+    }
+
+    /**
+     * Testing method for convertColorToHexadecimal private method
+     */
+    public String colorConverterTester(Color color) {
+        return convertColorToHexadecimal(color);
     }
 
 }
