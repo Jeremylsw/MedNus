@@ -55,9 +55,9 @@ public class UniqueTagListTest {
     public void testConvertColorToHexadecimal() {
         UniqueTagList uniqueTagList = new UniqueTagList();
 
-        Color myLengthThree = new Color(00,01,11);
-        Color myLengthFour = new Color(00,11,11);
-        Color myLengthFive = new Color(01,11,11);
+        Color myLengthThree = new Color(00, 01, 11);
+        Color myLengthFour = new Color(00, 11, 11);
+        Color myLengthFive = new Color(01, 11, 11);
 
         assertTrue(uniqueTagList.colorConverterTester(myLengthThree).equals("#00010b"));
         assertTrue(uniqueTagList.colorConverterTester(myLengthFour).equals("#000b0b"));
