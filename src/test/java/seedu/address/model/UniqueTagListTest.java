@@ -3,7 +3,7 @@ package seedu.address.model;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.*;
+import java.awt.Color;
 
 import org.junit.Rule;
 import org.junit.Test;
