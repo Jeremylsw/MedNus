@@ -1,6 +1,5 @@
 package seedu.address.logic.commands;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +13,7 @@ public class ToggleTagColorCommandTest {
     public void equals() {
         ToggleTagColorCommand firstCommand =
                 new ToggleTagColorCommand(true);
-        ToggleTagColorCommand secondCommand=
+        ToggleTagColorCommand secondCommand =
                 new ToggleTagColorCommand(false);
 
         // same object -> returns true
@@ -22,7 +21,7 @@ public class ToggleTagColorCommandTest {
 
         // same values -> returns true
         ToggleTagColorCommand findFirstCommandCopy =
-                new ToggleTagColorCommand (firstCommand.getToSet());
+                new ToggleTagColorCommand(firstCommand.getToSet());
         assertTrue(firstCommand.equals(findFirstCommandCopy));
 
         // different types -> returns false
@@ -34,10 +33,10 @@ public class ToggleTagColorCommandTest {
     }
 
     @Test
-    public void testGetToSet(){
+    public void testGetToSet() {
         ToggleTagColorCommand firstCommand =
                 new ToggleTagColorCommand(true);
-        ToggleTagColorCommand secondCommand=
+        ToggleTagColorCommand secondCommand =
                 new ToggleTagColorCommand(false);
 
         assertTrue(firstCommand.getToSet());
