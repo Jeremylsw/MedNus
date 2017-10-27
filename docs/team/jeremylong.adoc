@@ -9,8 +9,8 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. +
 It is written in Java, and has about 6 kLoC.
 
 *Code contributed*: +
-link:main/Jeremy.md[Functional code] +
-link:test/Jeremy.md[Test code] +
+link:https://github.com/CS2103AUG2017-T17-B2/main/tree/master/collated/main/Jeremy.md[Functional code] +
+link:https://github.com/CS2103AUG2017-T17-B2/main/tree/master/collated/test/Jeremy.md[Test code] +
 
 === Enhancement Added: List
 
