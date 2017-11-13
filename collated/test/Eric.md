@@ -1,124 +1,186 @@
 # Eric
-###### \java\seedu\address\logic\commands\AddAppointmentCommandTest.java
+###### /java/systemtests/AppointmentSystemTest.java
 ``` java
-public class AddAppointmentCommandTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
+public class AppointmentSystemTest extends AddressBookSystemTest {
 
     @Test
-    public void equals() throws ParseException, seedu.address.logic.parser.exceptions.ParseException {
-        String arg = "Lunch, tomorrow 5pm";
+    public void addAndRemoveAppointment() throws Exception {
+        Model model = getModel();
+        ReadOnlyPerson toAddAppointment = model.getAddressBook().getPersonList().get(0);
+        String description = "dinner";
+        String str = " 1 d/" + description + ", tonight 7pm to 10pm";
+        String command = AddAppointmentCommand.COMMAND_WORD + str;
+        assertCommandSuccess(command, toAddAppointment, AddAppointmentParser.getAppointmentFromString(str));
 
-        AddAppointmentCommand command = new AddAppointmentCommand(Index.fromOneBased(1), setAppointment(arg));
-        AddAppointmentCommand command2 = new AddAppointmentCommand(Index.fromOneBased(1), setAppointment(arg));
-        assertEquals(command, command2);
-        assertNotEquals(command, new AddAppointmentCommand(Index.fromOneBased(2), setAppointment(arg)));
+        command = CancelAppointmentCommand.COMMAND_WORD + " " + description + " with " + toAddAppointment.getName();
+        assertCommandSuccess(command, toAddAppointment, AddAppointmentParser.getAppointmentFromString(str));
     }
 
-    @Test
-    public void execute() throws ParseException, CommandException {
-
-        Index index1 = Index.fromOneBased(1);
-        try {
-            //Invalid date
-            String arg = "lunch, yesterday 5pm";
-            Command command = setCommand(index1, setAppointment(arg));
-            CommandResult result = command.execute();
-            assertEquals(result.feedbackToUser, AddAppointmentCommand.INVALID_DATE);
-
-            //Set to valid date
-            arg = "lunch, tomorrow 5pm";
-            command = setCommand(index1, setAppointment(arg));
-            result = command.execute();
-            assertEquals(result.feedbackToUser, AddAppointmentCommand.MESSAGE_SUCCESS);
-
-            //Set to valid date with end time
-            arg = "lunch, tomorrow 5pm to 7pm";
-            command = setCommand(index1, setAppointment(arg));
-            result = command.execute();
-            assertEquals(result.feedbackToUser, AddAppointmentCommand.MESSAGE_SUCCESS);
-        } catch (seedu.address.logic.parser.exceptions.ParseException ive) {
-            fail();
-        }
-
-    }
 
     @Test
-    public void outOfBoundsIndex() throws CommandException, seedu.address.logic.parser.exceptions.ParseException {
-        thrown.expect(CommandException.class);
-        setCommand(Index.fromOneBased(100),
-                AddAppointmentParser.getAppointmentFromString("lunch,tomorrow 5pm")).execute();
+    public void changeCalendarView() {
+        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " d", CalendarViewCommand.MESSAGE_SUCCESS);
+        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " w", CalendarViewCommand.MESSAGE_SUCCESS);
+        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " m", CalendarViewCommand.MESSAGE_SUCCESS);
+        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " y", CalendarViewCommand.MESSAGE_SUCCESS);
+        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " q",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, CalendarViewCommand.MESSAGE_USAGE));
     }
 
     /**
-     * Util methods to set appointment command
+     * Performs verification that calendarview changed
      */
-    private Command setCommand(Index index, Appointment appointment) {
-        AddAppointmentCommand command = new AddAppointmentCommand(index, appointment);
-        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        command.setData(model);
-        return command;
+    private void assertCommandSuccess(String command, String message) {
+        executeCommand(command);
+        assertEquals(getResultDisplay().getText() , message);
     }
 
-    private Appointment setAppointment(String str) throws seedu.address.logic.parser.exceptions.ParseException {
-        return AddAppointmentParser.getAppointmentFromString(str);
+    /**
+     * Performs verification that the expected model is the same after command is executing
+     */
+    private void assertCommandSuccess(String command, ReadOnlyPerson toAdd, Appointment appointment) {
+        Model expectedModel = getModel();
+        String expectedResultMessage;
+
+        try {
+            if (!command.contains("cancel")) {
+                expectedModel.addAppointment(toAdd, appointment);
+                expectedResultMessage = AddAppointmentCommand.MESSAGE_SUCCESS;
+            } else {
+                expectedModel.removeAppointment(toAdd, appointment);
+                expectedResultMessage = CancelAppointmentCommand.MESSAGE_SUCCESS;
+            }
+        } catch (PersonNotFoundException e) {
+            throw new IllegalArgumentException("person not found in model.");
+        }
+
+        assertCommandSuccess(command, expectedModel, expectedResultMessage);
+    }
+    /**
+     * Performs the same verification as {@code assertCommandSuccess(String, ReadOnlyPerson)} except that the result
+     * display box displays {@code expectedResultMessage} and the model related components equal to
+     * {@code expectedModel}.
+     *
+     * @see AppointmentSystemTest#assertCommandSuccess(String, ReadOnlyPerson, Appointment)
+     */
+    private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage) {
+        executeCommand(command);
+        assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
     }
 
 }
 ```
-###### \java\seedu\address\logic\commands\CancelAppointmentCommandTest.java
+###### /java/seedu/address/ui/CalendarWindowTest.java
 ``` java
-public class CancelAppointmentCommandTest {
+public class CalendarWindowTest extends GuiUnitTest {
+
+    private CalendarWindow calendarWindow;
+    @Before
+    public void setUp() {
+        calendarWindow = new CalendarWindow(TypicalPersons.getTypicalAddressBook().getPersonList());
+        uiPartRule.setUiPart(calendarWindow);
+    }
+
+    @Test
+    public void display() {
+        assertNotNull(calendarWindow.getRoot());
+        //default page should be daily
+        assertEquals(calendarWindow.getRoot().getSelectedPage(), calendarWindow.getRoot().getDayPage());
+    }
+}
+```
+###### /java/seedu/address/logic/parser/AddAppointmentParserTest.java
+``` java
+public class AddAppointmentParserTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+    private AddAppointmentParser parser = new AddAppointmentParser();
 
     @Test
-    public void equals() {
-        String personName = "Alice";
-        String appointmentDescription  = "Lunch, tonight 5pm";
-        CancelAppointmentCommand command = new CancelAppointmentCommand(personName, appointmentDescription);
-        CancelAppointmentCommand command1 = new CancelAppointmentCommand(personName, appointmentDescription);
+    public void prefixesNotPresent() throws ParseException {
+        thrown.expect(ParseException.class);
+        parser.parse("1 lunch tomorrow 5pm");
+    }
 
-        assertEquals(command, command1);
+    @Test
+    public void illegalExpression() throws ParseException {
+        thrown.expect(ParseException.class);
+        parser.parse("n/@@@@ d/2018/02/10 10:10");
+    }
 
-        String personName1 = "Bob";
-        command1 = new CancelAppointmentCommand(personName1, appointmentDescription);
+    @Test
+    public void nonParsableString() throws ParseException {
+        thrown.expect(ParseException.class);
+        parser.parse("appt 1 d/lunch ,cant parse this string");
+    }
+    @Test
+    public void parseDateExpression() throws ParseException, java.text.ParseException {
 
-        //Different name
-        assertNotEquals(command, command1);
-
-        String appointmentDescription1 = "Dinner, tonight 5pm";
-        command = new CancelAppointmentCommand(personName1, appointmentDescription1);
-
-        //Different appointment
-        assertNotEquals(command, command1);
+        AddAppointmentCommand command = parser.parse("appt 1 d/Lunch, tomorrow 5pm");
+        Appointment appointment = AddAppointmentParser.getAppointmentFromString("Lunch, tomorrow 5pm");
+        assertEquals(new AddAppointmentCommand(Index.fromOneBased(1), appointment), command);
 
     }
 
     @Test
-    public void noSuchPersonTest() throws CommandException {
-        CancelAppointmentCommand command = new CancelAppointmentCommand("noSuchPerson", "Dinner, 5pm");
-        command.setData(model, new CommandHistory(), new UndoRedoStack());
-        thrown.expect(CommandException.class);
-        command.executeUndoableCommand();
-    }
+    public void parseAppointmentsWithDuration() {
 
-    @Test
-    public void noSuchAppointmentTest() throws CommandException {
-        CancelAppointmentCommand command = new CancelAppointmentCommand("Alice Pauline", "Study, 5pm");
-        command.setData(model, new CommandHistory(), new UndoRedoStack());
-        thrown.expect(CommandException.class);
-        command.executeUndoableCommand();
+        try {
+            AddAppointmentCommand command = parser.parse("appt 1 d/Lunch, tomorrow 5pm to 7pm");
+            Appointment appointment = AddAppointmentParser.getAppointmentFromString("Lunch, tomorrow 5pm to 7pm");
+            assertEquals(new AddAppointmentCommand(Index.fromOneBased(1), appointment), command);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
-
 }
 ```
-###### \java\seedu\address\logic\commands\ToggleTagCommandTest.java
+###### /java/seedu/address/logic/parser/ToggleTagColorParserTest.java
+``` java
+    @Test
+    public void parseMoreThanTwoWords() throws Exception {
+        ToggleTagColorParser parser = new ToggleTagColorParser();
+        thrown.expect(ParseException.class);
+        parser.parse("This is longer than what is accepted");
+    }
+```
+###### /java/seedu/address/logic/parser/CancelAppointmentParserTest.java
+``` java
+public class CancelAppointmentParserTest {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void parseException() throws ParseException {
+        String str = "this cant be parsed";
+        CancelAppointmentParser parser = new CancelAppointmentParser();
+        thrown.expect(ParseException.class);
+        parser.parse(str);
+    }
+
+    @Test
+    public void parseWithoutKeyWordWith() throws ParseException {
+        String str = "Lunch Alice Pauline";
+        CancelAppointmentParser parser = new CancelAppointmentParser();
+        thrown.expect(ParseException.class);
+        parser.parse(str);
+    }
+
+    @Test
+    public void parseSuccess() throws ParseException {
+        String str = "Lunch with Alice Pauline";
+        CancelAppointmentParser parser = new CancelAppointmentParser();
+        CancelAppointmentCommand command = (CancelAppointmentCommand) parser.parse(str);
+        CancelAppointmentCommand command2 = new CancelAppointmentCommand("Alice Pauline", "Lunch");
+
+        assertEquals(command, command2);
+
+    }
+}
+```
+###### /java/seedu/address/logic/commands/ToggleTagCommandTest.java
 ``` java
 public class ToggleTagCommandTest {
 
@@ -225,98 +287,166 @@ public class ToggleTagCommandTest {
 
 }
 ```
-###### \java\seedu\address\logic\parser\AddAppointmentParserTest.java
+###### /java/seedu/address/logic/commands/AddAppointmentCommandTest.java
 ``` java
-public class AddAppointmentParserTest {
+public class AddAppointmentCommandTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private AddAppointmentParser parser = new AddAppointmentParser();
 
     @Test
-    public void prefixesNotPresent() throws ParseException {
-        thrown.expect(ParseException.class);
-        parser.parse("1 lunch tomorrow 5pm");
+    public void equals() throws ParseException, seedu.address.logic.parser.exceptions.ParseException {
+        String arg = "Lunch, tomorrow 5pm";
+
+        AddAppointmentCommand command = new AddAppointmentCommand(Index.fromOneBased(1), setAppointment(arg));
+        AddAppointmentCommand command2 = new AddAppointmentCommand(Index.fromOneBased(1), setAppointment(arg));
+        assertEquals(command, command2);
+        assertNotEquals(command, new AddAppointmentCommand(Index.fromOneBased(2), setAppointment(arg)));
     }
 
     @Test
-    public void illegalExpression() throws ParseException {
-        thrown.expect(ParseException.class);
-        parser.parse("n/@@@@ d/2018/02/10 10:10");
+    public void execute() throws ParseException, CommandException {
+
+        Index index1 = Index.fromOneBased(1);
+        try {
+            //Invalid date
+            String arg = "lunch, yesterday 5pm";
+            Command command = setCommand(index1, setAppointment(arg));
+            CommandResult result = command.execute();
+            assertEquals(result.feedbackToUser, AddAppointmentCommand.INVALID_DATE);
+
+            //Set to valid date
+            arg = "lunch, tomorrow 5pm";
+            command = setCommand(index1, setAppointment(arg));
+            result = command.execute();
+            assertEquals(result.feedbackToUser, AddAppointmentCommand.MESSAGE_SUCCESS);
+
+            //Set to valid date with end time
+            arg = "lunch, tomorrow 5pm to 7pm";
+            command = setCommand(index1, setAppointment(arg));
+            result = command.execute();
+            assertEquals(result.feedbackToUser, AddAppointmentCommand.MESSAGE_SUCCESS);
+        } catch (seedu.address.logic.parser.exceptions.ParseException ive) {
+            fail();
+        }
+
     }
 
     @Test
-    public void nonParsableString() throws ParseException {
-        thrown.expect(ParseException.class);
-        parser.parse("appt 1 d/lunch ,cant parse this string");
-    }
-    @Test
-    public void parseDateExpression() throws ParseException, java.text.ParseException {
-
-        AddAppointmentCommand command = parser.parse("appt 1 d/Lunch, tomorrow 5pm");
-        Appointment appointment = AddAppointmentParser.getAppointmentFromString("Lunch, tomorrow 5pm");
-        assertEquals(new AddAppointmentCommand(Index.fromOneBased(1), appointment), command);
-
+    public void outOfBoundsIndex() throws CommandException, seedu.address.logic.parser.exceptions.ParseException {
+        thrown.expect(CommandException.class);
+        setCommand(Index.fromOneBased(100),
+                AddAppointmentParser.getAppointmentFromString("lunch,tomorrow 5pm")).execute();
     }
 
+    /**
+     * Util methods to set appointment command
+     */
+    private Command setCommand(Index index, Appointment appointment) {
+        AddAppointmentCommand command = new AddAppointmentCommand(index, appointment);
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        command.setData(model);
+        return command;
+    }
+
+    private Appointment setAppointment(String str) throws seedu.address.logic.parser.exceptions.ParseException {
+        return AddAppointmentParser.getAppointmentFromString(str);
+    }
+
+}
+```
+###### /java/seedu/address/logic/commands/CancelAppointmentCommandTest.java
+``` java
+public class CancelAppointmentCommandTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    private Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+
     @Test
-    public void parseAppointmentsWithDuration() {
+    public void equals() {
+        String personName = "Alice";
+        String appointmentDescription  = "Lunch, tonight 5pm";
+        CancelAppointmentCommand command = new CancelAppointmentCommand(personName, appointmentDescription);
+        CancelAppointmentCommand command1 = new CancelAppointmentCommand(personName, appointmentDescription);
+
+        assertEquals(command, command1);
+
+        String personName1 = "Bob";
+        command1 = new CancelAppointmentCommand(personName1, appointmentDescription);
+
+        //Different name
+        assertNotEquals(command, command1);
+
+        String appointmentDescription1 = "Dinner, tonight 5pm";
+        command = new CancelAppointmentCommand(personName1, appointmentDescription1);
+
+        //Different appointment
+        assertNotEquals(command, command1);
+
+    }
+
+    @Test
+    public void noSuchPersonTest() throws CommandException {
+        CancelAppointmentCommand command = new CancelAppointmentCommand("noSuchPerson", "Dinner, 5pm");
+        command.setData(model, new CommandHistory(), new UndoRedoStack());
+        thrown.expect(CommandException.class);
+        command.executeUndoableCommand();
+    }
+
+    @Test
+    public void noSuchAppointmentTest() throws CommandException {
+        CancelAppointmentCommand command = new CancelAppointmentCommand("Alice Pauline", "Study, 5pm");
+        command.setData(model, new CommandHistory(), new UndoRedoStack());
+        thrown.expect(CommandException.class);
+        command.executeUndoableCommand();
+    }
+
+}
+```
+###### /java/seedu/address/model/person/AppointmentTest.java
+``` java
+public class AppointmentTest {
+
+    @Test
+    public void equals() {
+
+        Calendar calendar = Calendar.getInstance();
+        String apptString = "Test";
+        Appointment appt = new Appointment(apptString, calendar, calendar);
+        Appointment appt2 = new Appointment(apptString, calendar, calendar);
+
+        assertEquals(appt, appt2);
+    }
+
+    @Test
+    public void toStringTest() {
+        Calendar calendar = Calendar.getInstance();
+        String apptString = "Test";
+        Appointment appt = new Appointment(apptString, calendar, calendar);
+
+        assertEquals(appt.toString(), "Appointment on " + appt.getDateInStringFormat());
+    }
+}
+```
+###### /java/seedu/address/model/UniquePersonListTest.java
+``` java
+    @Test
+    public void addAppointmentThrowsNoPersonFoundException() throws PersonNotFoundException {
+        UniquePersonList uniquePersonList = new UniquePersonList();
+        thrown.expect(PersonNotFoundException.class);
 
         try {
-            AddAppointmentCommand command = parser.parse("appt 1 d/Lunch, tomorrow 5pm to 7pm");
-            Appointment appointment = AddAppointmentParser.getAppointmentFromString("Lunch, tomorrow 5pm to 7pm");
-            assertEquals(new AddAppointmentCommand(Index.fromOneBased(1), appointment), command);
-        } catch (ParseException e) {
-            e.printStackTrace();
+            uniquePersonList.addAppointment(TypicalPersons.ALICE,
+                    AddAppointmentParser.getAppointmentFromString("lunch, tomorrow 5pm"));
+        } catch (seedu.address.logic.parser.exceptions.ParseException e) {
+            fail();
         }
     }
-}
 ```
-###### \java\seedu\address\logic\parser\CancelAppointmentParserTest.java
-``` java
-public class CancelAppointmentParserTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void parseException() throws ParseException {
-        String str = "this cant be parsed";
-        CancelAppointmentParser parser = new CancelAppointmentParser();
-        thrown.expect(ParseException.class);
-        parser.parse(str);
-    }
-
-    @Test
-    public void parseWithoutKeyWordWith() throws ParseException {
-        String str = "Lunch Alice Pauline";
-        CancelAppointmentParser parser = new CancelAppointmentParser();
-        thrown.expect(ParseException.class);
-        parser.parse(str);
-    }
-
-    @Test
-    public void parseSuccess() throws ParseException {
-        String str = "Lunch with Alice Pauline";
-        CancelAppointmentParser parser = new CancelAppointmentParser();
-        CancelAppointmentCommand command = (CancelAppointmentCommand) parser.parse(str);
-        CancelAppointmentCommand command2 = new CancelAppointmentCommand("Alice Pauline", "Lunch");
-
-        assertEquals(command, command2);
-
-    }
-}
-```
-###### \java\seedu\address\logic\parser\ToggleTagColorParserTest.java
-``` java
-    @Test
-    public void parseMoreThanTwoWords() throws Exception {
-        ToggleTagColorParser parser = new ToggleTagColorParser();
-        thrown.expect(ParseException.class);
-        parser.parse("This is longer than what is accepted");
-    }
-```
-###### \java\seedu\address\model\AppointmentListTest.java
+###### /java/seedu/address/model/AppointmentListTest.java
 ``` java
 public class AppointmentListTest {
 
@@ -404,47 +534,7 @@ public class AppointmentListTest {
     }
 }
 ```
-###### \java\seedu\address\model\person\AppointmentTest.java
-``` java
-public class AppointmentTest {
-
-    @Test
-    public void equals() {
-
-        Calendar calendar = Calendar.getInstance();
-        String apptString = "Test";
-        Appointment appt = new Appointment(apptString, calendar, calendar);
-        Appointment appt2 = new Appointment(apptString, calendar, calendar);
-
-        assertEquals(appt, appt2);
-    }
-
-    @Test
-    public void toStringTest() {
-        Calendar calendar = Calendar.getInstance();
-        String apptString = "Test";
-        Appointment appt = new Appointment(apptString, calendar, calendar);
-
-        assertEquals(appt.toString(), "Appointment on " + appt.getDateInStringFormat());
-    }
-}
-```
-###### \java\seedu\address\model\UniquePersonListTest.java
-``` java
-    @Test
-    public void addAppointmentThrowsNoPersonFoundException() throws PersonNotFoundException {
-        UniquePersonList uniquePersonList = new UniquePersonList();
-        thrown.expect(PersonNotFoundException.class);
-
-        try {
-            uniquePersonList.addAppointment(TypicalPersons.ALICE,
-                    AddAppointmentParser.getAppointmentFromString("lunch, tomorrow 5pm"));
-        } catch (seedu.address.logic.parser.exceptions.ParseException e) {
-            fail();
-        }
-    }
-```
-###### \java\seedu\address\model\UniqueTagListTest.java
+###### /java/seedu/address/model/UniqueTagListTest.java
 ``` java
     @Test
     public void tagsTests() throws IllegalValueException {
@@ -524,7 +614,7 @@ public class AppointmentTest {
 
     }
 ```
-###### \java\seedu\address\testutil\PersonBuilder.java
+###### /java/seedu/address/testutil/PersonBuilder.java
 ``` java
     /**
      * Sets appointment with Date of the person that we are building
@@ -541,94 +631,4 @@ public class AppointmentTest {
         this.person.setAppointment(list);
         return this;
     }
-```
-###### \java\seedu\address\ui\CalendarWindowTest.java
-``` java
-public class CalendarWindowTest extends GuiUnitTest {
-
-    private CalendarWindow calendarWindow;
-    @Before
-    public void setUp() {
-        calendarWindow = new CalendarWindow(TypicalPersons.getTypicalAddressBook().getPersonList());
-        uiPartRule.setUiPart(calendarWindow);
-    }
-
-    @Test
-    public void display() {
-        assertNotNull(calendarWindow.getRoot());
-        //default page should be daily
-        assertEquals(calendarWindow.getRoot().getSelectedPage(), calendarWindow.getRoot().getDayPage());
-    }
-}
-```
-###### \java\systemtests\AppointmentSystemTest.java
-``` java
-public class AppointmentSystemTest extends AddressBookSystemTest {
-
-    @Test
-    public void addAndRemoveAppointment() throws Exception {
-        Model model = getModel();
-        ReadOnlyPerson toAddAppointment = model.getAddressBook().getPersonList().get(0);
-        String description = "dinner";
-        String str = " 1 d/" + description + ", tonight 7pm to 10pm";
-        String command = AddAppointmentCommand.COMMAND_WORD + str;
-        assertCommandSuccess(command, toAddAppointment, AddAppointmentParser.getAppointmentFromString(str));
-
-        command = CancelAppointmentCommand.COMMAND_WORD + " " + description + " with " + toAddAppointment.getName();
-        assertCommandSuccess(command, toAddAppointment, AddAppointmentParser.getAppointmentFromString(str));
-    }
-
-
-    @Test
-    public void changeCalendarView() {
-        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " d", CalendarViewCommand.MESSAGE_SUCCESS);
-        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " w", CalendarViewCommand.MESSAGE_SUCCESS);
-        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " m", CalendarViewCommand.MESSAGE_SUCCESS);
-        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " y", CalendarViewCommand.MESSAGE_SUCCESS);
-        assertCommandSuccess(CalendarViewCommand.COMMAND_WORD + " q",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, CalendarViewCommand.MESSAGE_USAGE));
-    }
-
-    /**
-     * Performs verification that calendarview changed
-     */
-    private void assertCommandSuccess(String command, String message) {
-        executeCommand(command);
-        assertEquals(getResultDisplay().getText() , message);
-    }
-
-    /**
-     * Performs verification that the expected model is the same after command is executing
-     */
-    private void assertCommandSuccess(String command, ReadOnlyPerson toAdd, Appointment appointment) {
-        Model expectedModel = getModel();
-        String expectedResultMessage;
-
-        try {
-            if (!command.contains("cancel")) {
-                expectedModel.addAppointment(toAdd, appointment);
-                expectedResultMessage = AddAppointmentCommand.MESSAGE_SUCCESS;
-            } else {
-                expectedModel.removeAppointment(toAdd, appointment);
-                expectedResultMessage = CancelAppointmentCommand.MESSAGE_SUCCESS;
-            }
-        } catch (PersonNotFoundException e) {
-            throw new IllegalArgumentException("person not found in model.");
-        }
-
-        assertCommandSuccess(command, expectedModel, expectedResultMessage);
-    }
-    /**
-     * Performs the same verification as {@code assertCommandSuccess(String, ReadOnlyPerson)} except that the result
-     * display box displays {@code expectedResultMessage} and the model related components equal to
-     * {@code expectedModel}.
-     *
-     * @see AppointmentSystemTest#assertCommandSuccess(String, ReadOnlyPerson, Appointment)
-     */
-    private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage) {
-        executeCommand(command);
-        assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
-    }
-
-}
 ```

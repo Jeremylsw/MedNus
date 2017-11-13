@@ -1,82 +1,124 @@
 # Ernest
-###### \java\seedu\address\logic\commands\ListByBloodtypeCommandTest.java
+###### /java/systemtests/AddCommandSystemTest.java
 ``` java
-/**
- * Contains integration tests (interaction with the Model) for {@code FindCommand}.
- */
-public class ListByBloodtypeCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        /* Case: invalid bloodtype -> rejected */
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + ADDRESS_DESC_AMY + INVALID_BLOODTYPE_DESC;
+        assertCommandFailure(command, Bloodtype.MESSAGE_BLOODTYPE_CONSTRAINTS);
+```
+###### /java/systemtests/FindCommandSystemTest.java
+``` java
+        /* Case: find bloodtype of person in address book -> 0 persons found */
+        command = FindCommand.COMMAND_WORD + " " + DANIEL.getBloodType().type;
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+```
+###### /java/systemtests/EditCommandSystemTest.java
+``` java
+        /* Case: invalid bloodtype -> rejected */
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + INVALID_BLOODTYPE_DESC,
+                Bloodtype.MESSAGE_BLOODTYPE_CONSTRAINTS);
+```
+###### /java/seedu/address/logic/parser/RelationshipCommandParserTest.java
+``` java
+public class RelationshipCommandParserTest {
+    private RelationshipCommandParser parser = new RelationshipCommandParser();
 
     @Test
-    public void equals() {
-        BloodtypeContainsKeywordPredicate firstPredicate =
-                new BloodtypeContainsKeywordPredicate(Collections.singletonList("A"));
-        BloodtypeContainsKeywordPredicate secondPredicate =
-                new BloodtypeContainsKeywordPredicate(Collections.singletonList("AB"));
+    public void parseIndexSpecifiedFailure() throws Exception {
+        final Relationship relation = new Relationship("Some relation.");
 
-        ListByBloodtypeCommand findFirstCommand = new ListByBloodtypeCommand(firstPredicate);
-        ListByBloodtypeCommand findSecondCommand = new ListByBloodtypeCommand(secondPredicate);
+        // have relations
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_RELATIONSHIP.toString() + " " + relation;
+        RelationshipCommand expectedCommand = new RelationshipCommand(INDEX_FIRST_PERSON, relation);
+        assertParseSuccess(parser, userInput, expectedCommand);
 
-        // same object -> returns true
-        assertTrue(findFirstCommand.equals(findFirstCommand));
-
-        // same values -> returns true
-        ListByBloodtypeCommand findFirstCommandCopy = new ListByBloodtypeCommand(firstPredicate);
-        assertTrue(findFirstCommand.equals(findFirstCommandCopy));
-
-        // different types -> returns false
-        assertFalse(findFirstCommand.equals(1));
-
-        // null
-        assertNotNull(findFirstCommand);
-
-        // different person -> returns false
-        assertFalse(findFirstCommand.equals(findSecondCommand));
+        // no relations
+        userInput = targetIndex.getOneBased() + " " + PREFIX_RELATIONSHIP.toString();
+        expectedCommand = new RelationshipCommand(INDEX_FIRST_PERSON, new Relationship(""));
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
-    public void executeZeroKeywordsNoPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        ListByBloodtypeCommand command = prepareCommand(" ");
-        assertCommandSuccess(command, expectedMessage, Collections.emptyList());
+    public void parseNoFieldSpecifiedFailure() throws Exception {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RelationshipCommand.MESSAGE_USAGE);
+
+        // nothing at all
+        assertParseFailure(parser, RelationshipCommand.COMMAND_WORD, expectedMessage);
     }
-
-    @Test
-    public void executeMultipleKeywordsMultiplePersonsFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        ListByBloodtypeCommand command = prepareCommand("O+ A- B-");
-        assertCommandSuccess(command, expectedMessage, Arrays.asList(ALICE, BENSON, DANIEL));
-    }
-
-    /**
-     * Parses {@code userInput} into a {@code FindCommand}.
-     */
-    private ListByBloodtypeCommand prepareCommand(String userInput) {
-        ListByBloodtypeCommand command = new ListByBloodtypeCommand(new BloodtypeContainsKeywordPredicate(
-                Arrays.asList(userInput.split("\\s+"))));
-        command.setData(model, new CommandHistory(), new UndoRedoStack());
-        return command;
-    }
-
-    /**
-     * Asserts that {@code command} is successfully executed, and<br>
-     * - the command feedback is equal to {@code expectedMessage}<br>
-     * - the {@code FilteredList<ReadOnlyPerson>} is equal to {@code expectedList}<br>
-     * - the {@code AddressBook} in model remains the same after executing the {@code command}
-     */
-    private void assertCommandSuccess(ListByBloodtypeCommand command, String expectedMessage,
-                                      List<ReadOnlyPerson> expectedList) {
-        AddressBook expectedAddressBook = new AddressBook(model.getAddressBook());
-        CommandResult commandResult = command.execute();
-
-        assertEquals(expectedMessage, commandResult.feedbackToUser);
-        assertEquals(expectedList, model.getFilteredPersonList());
-        assertEquals(expectedAddressBook, model.getAddressBook());
-    }
-
 }
 ```
-###### \java\seedu\address\logic\commands\RelationshipCommandTest.java
+###### /java/seedu/address/logic/parser/AddressBookParserTest.java
+``` java
+    @Test
+    public void parseCommandListByBloodtype() throws Exception {
+        List<String> keyword = Arrays.asList("A+", "ab", "O-");
+        ListByBloodtypeCommand command = (ListByBloodtypeCommand) parser.parseCommand(
+                ListByBloodtypeCommand.COMMAND_WORD + " "
+                        + keyword.stream().collect(Collectors.joining(" ")));
+        assertEquals(new ListByBloodtypeCommand(new BloodtypeContainsKeywordPredicate(keyword)), command);
+    }
+```
+###### /java/seedu/address/logic/parser/AddressBookParserTest.java
+``` java
+    @Test
+    public void parseCommandRelationship() throws Exception {
+        final Relationship relation = new Relationship("Some relation.");
+        RelationshipCommand command = (RelationshipCommand) parser.parseCommand(RelationshipCommand.COMMAND_WORD
+                + " " + INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_RELATIONSHIP + " " + relation.value);
+        assertEquals(new RelationshipCommand(INDEX_FIRST_PERSON, relation), command);
+    }
+```
+###### /java/seedu/address/logic/parser/ParserUtilTest.java
+``` java
+    @Test
+    public void parseBloodTypeNullThrowsNullPointerException() throws Exception {
+        thrown.expect(NullPointerException.class);
+        ParserUtil.parseBloodType(null);
+    }
+
+    @Test
+    public void parseBloodTypeInvalidValueThrowsIllegalValueException() throws Exception {
+        thrown.expect(IllegalValueException.class);
+        ParserUtil.parseBloodType(Optional.of(INVALID_BLOODTYPE));
+    }
+
+    @Test
+    public void parseBloodTypeOptionalEmptyReturnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseBloodType(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseBloodTypeValidValueReturnsBloodType() throws Exception {
+        Bloodtype expectedBloodType = new Bloodtype(VALID_BLOODTYPE);
+        Optional<Bloodtype> actualBloodType = ParserUtil.parseBloodType(Optional.of(VALID_BLOODTYPE));
+
+        assertEquals(expectedBloodType, actualBloodType.get());
+    }
+```
+###### /java/seedu/address/logic/parser/ParserUtilTest.java
+``` java
+    @Test
+    public void parseRelationshipNullThrowsNullPointerException() throws Exception {
+        thrown.expect(NullPointerException.class);
+        ParserUtil.parseRelationship(null);
+    }
+
+    @Test
+    public void parseRelationshipOptionalEmptyReturnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseRelationship(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseRelationshipValidValueReturnsRelationship() throws Exception {
+        Relationship expectedRelationship = new Relationship(VALID_RELATIONSHIP);
+        Optional<Relationship> actualRelationship = ParserUtil.parseRelationship(Optional.of(VALID_RELATIONSHIP));
+
+        assertEquals(expectedRelationship, actualRelationship.get());
+    }
+```
+###### /java/seedu/address/logic/commands/RelationshipCommandTest.java
 ``` java
 /**
   * Contains integration tests (interaction with the Model) and unit tests for RelationshipCommand.
@@ -217,102 +259,157 @@ public class RelationshipCommandTest {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\AddressBookParserTest.java
+###### /java/seedu/address/logic/commands/ListByBloodtypeCommandTest.java
 ``` java
+/**
+ * Contains integration tests (interaction with the Model) for {@code FindCommand}.
+ */
+public class ListByBloodtypeCommandTest {
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
     @Test
-    public void parseCommandListByBloodtype() throws Exception {
-        List<String> keyword = Arrays.asList("A+", "ab", "O-");
-        ListByBloodtypeCommand command = (ListByBloodtypeCommand) parser.parseCommand(
-                ListByBloodtypeCommand.COMMAND_WORD + " "
-                        + keyword.stream().collect(Collectors.joining(" ")));
-        assertEquals(new ListByBloodtypeCommand(new BloodtypeContainsKeywordPredicate(keyword)), command);
+    public void equals() {
+        BloodtypeContainsKeywordPredicate firstPredicate =
+                new BloodtypeContainsKeywordPredicate(Collections.singletonList("A"));
+        BloodtypeContainsKeywordPredicate secondPredicate =
+                new BloodtypeContainsKeywordPredicate(Collections.singletonList("AB"));
+
+        ListByBloodtypeCommand findFirstCommand = new ListByBloodtypeCommand(firstPredicate);
+        ListByBloodtypeCommand findSecondCommand = new ListByBloodtypeCommand(secondPredicate);
+
+        // same object -> returns true
+        assertTrue(findFirstCommand.equals(findFirstCommand));
+
+        // same values -> returns true
+        ListByBloodtypeCommand findFirstCommandCopy = new ListByBloodtypeCommand(firstPredicate);
+        assertTrue(findFirstCommand.equals(findFirstCommandCopy));
+
+        // different types -> returns false
+        assertFalse(findFirstCommand.equals(1));
+
+        // null
+        assertNotNull(findFirstCommand);
+
+        // different person -> returns false
+        assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
     @Test
-    public void parseCommandRelationship() throws Exception {
-        final Relationship relation = new Relationship("Some relation.");
-        RelationshipCommand command = (RelationshipCommand) parser.parseCommand(RelationshipCommand.COMMAND_WORD
-                + " " + INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_RELATIONSHIP + " " + relation.value);
-        assertEquals(new RelationshipCommand(INDEX_FIRST_PERSON, relation), command);
+    public void executeZeroKeywordsNoPersonFound() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        ListByBloodtypeCommand command = prepareCommand(" ");
+        assertCommandSuccess(command, expectedMessage, Collections.emptyList());
     }
+
+    @Test
+    public void executeMultipleKeywordsMultiplePersonsFound() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        ListByBloodtypeCommand command = prepareCommand("O+ A- B-");
+        assertCommandSuccess(command, expectedMessage, Arrays.asList(ALICE, BENSON, DANIEL));
+    }
+
+    /**
+     * Parses {@code userInput} into a {@code FindCommand}.
+     */
+    private ListByBloodtypeCommand prepareCommand(String userInput) {
+        ListByBloodtypeCommand command = new ListByBloodtypeCommand(new BloodtypeContainsKeywordPredicate(
+                Arrays.asList(userInput.split("\\s+"))));
+        command.setData(model, new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+
+    /**
+     * Asserts that {@code command} is successfully executed, and<br>
+     * - the command feedback is equal to {@code expectedMessage}<br>
+     * - the {@code FilteredList<ReadOnlyPerson>} is equal to {@code expectedList}<br>
+     * - the {@code AddressBook} in model remains the same after executing the {@code command}
+     */
+    private void assertCommandSuccess(ListByBloodtypeCommand command, String expectedMessage,
+                                      List<ReadOnlyPerson> expectedList) {
+        AddressBook expectedAddressBook = new AddressBook(model.getAddressBook());
+        CommandResult commandResult = command.execute();
+
+        assertEquals(expectedMessage, commandResult.feedbackToUser);
+        assertEquals(expectedList, model.getFilteredPersonList());
+        assertEquals(expectedAddressBook, model.getAddressBook());
+    }
+
+}
 ```
-###### \java\seedu\address\logic\parser\ParserUtilTest.java
+###### /java/seedu/address/model/person/RelationshipTest.java
 ``` java
-    @Test
-    public void parseBloodTypeNullThrowsNullPointerException() throws Exception {
-        thrown.expect(NullPointerException.class);
-        ParserUtil.parseBloodType(null);
-    }
+public class RelationshipTest {
 
     @Test
-    public void parseBloodTypeInvalidValueThrowsIllegalValueException() throws Exception {
-        thrown.expect(IllegalValueException.class);
-        ParserUtil.parseBloodType(Optional.of(INVALID_BLOODTYPE));
-    }
+    public void equals() {
+        Relationship relation = new Relationship("John Doe");
 
-    @Test
-    public void parseBloodTypeOptionalEmptyReturnsOptionalEmpty() throws Exception {
-        assertFalse(ParserUtil.parseBloodType(Optional.empty()).isPresent());
-    }
+        // same object -> returns true
+        assertTrue(relation.equals(relation));
 
-    @Test
-    public void parseBloodTypeValidValueReturnsBloodType() throws Exception {
-        Bloodtype expectedBloodType = new Bloodtype(VALID_BLOODTYPE);
-        Optional<Bloodtype> actualBloodType = ParserUtil.parseBloodType(Optional.of(VALID_BLOODTYPE));
+        // same values -> returns true
+        Relationship relationshipCopy = new Relationship(relation.value);
+        assertTrue(relation.equals(relationshipCopy));
 
-        assertEquals(expectedBloodType, actualBloodType.get());
-    }
+        // different types -> returns false
+        assertFalse(relation.equals(1));
 
-    @Test
-    public void parseRelationshipNullThrowsNullPointerException() throws Exception {
-        thrown.expect(NullPointerException.class);
-        ParserUtil.parseRelationship(null);
-    }
+        // different person -> returns false
+        Relationship differentRelationship = new Relationship("Mary Jane");
+        assertFalse(relation.equals(differentRelationship));
 
-    @Test
-    public void parseRelationshipOptionalEmptyReturnsOptionalEmpty() throws Exception {
-        assertFalse(ParserUtil.parseRelationship(Optional.empty()).isPresent());
-    }
-
-    @Test
-    public void parseRelationshipValidValueReturnsRelationship() throws Exception {
-        Relationship expectedRelationship = new Relationship(VALID_RELATIONSHIP);
-        Optional<Relationship> actualRelationship = ParserUtil.parseRelationship(Optional.of(VALID_RELATIONSHIP));
-
-        assertEquals(expectedRelationship, actualRelationship.get());
-    }
-```
-###### \java\seedu\address\logic\parser\RelationshipCommandParserTest.java
-``` java
-public class RelationshipCommandParserTest {
-    private RelationshipCommandParser parser = new RelationshipCommandParser();
-
-    @Test
-    public void parseIndexSpecifiedFailure() throws Exception {
-        final Relationship relation = new Relationship("Some relation.");
-
-        // have relations
-        Index targetIndex = INDEX_FIRST_PERSON;
-        String userInput = targetIndex.getOneBased() + " " + PREFIX_RELATIONSHIP.toString() + " " + relation;
-        RelationshipCommand expectedCommand = new RelationshipCommand(INDEX_FIRST_PERSON, relation);
-        assertParseSuccess(parser, userInput, expectedCommand);
-
-        // no relations
-        userInput = targetIndex.getOneBased() + " " + PREFIX_RELATIONSHIP.toString();
-        expectedCommand = new RelationshipCommand(INDEX_FIRST_PERSON, new Relationship(""));
-        assertParseSuccess(parser, userInput, expectedCommand);
-    }
-
-    @Test
-    public void parseNoFieldSpecifiedFailure() throws Exception {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RelationshipCommand.MESSAGE_USAGE);
-
-        // nothing at all
-        assertParseFailure(parser, RelationshipCommand.COMMAND_WORD, expectedMessage);
+        // null
+        assertNotNull(relation);
     }
 }
 ```
-###### \java\seedu\address\model\person\BloodtypeContainsKeywordPredicateTest.java
+###### /java/seedu/address/model/person/BloodtypeTest.java
+``` java
+public class BloodtypeTest {
+
+    @Test
+    public void isValidBloodType() {
+        // invalid blood types
+        assertFalse(Bloodtype.isValidBloodType("")); // empty string
+        assertFalse(Bloodtype.isValidBloodType(" ")); // spaces only
+        assertFalse(Bloodtype.isValidBloodType("L")); // not one of twelve valid inputs
+        assertFalse(Bloodtype.isValidBloodType("cat")); // not one of twelve valid inputs
+        assertFalse(Bloodtype.isValidBloodType("$%")); // not one of twelve valid inputs
+        assertFalse(Bloodtype.isValidBloodType("ABCDE")); // more than three characters
+        assertFalse(Bloodtype.isValidBloodType("+")); // "+" or "-" alone
+        assertFalse(Bloodtype.isValidBloodType("B++"));
+        assertFalse(Bloodtype.isValidBloodType("+B"));
+        assertFalse(Bloodtype.isValidBloodType("+F"));
+        assertFalse(Bloodtype.isValidBloodType("N"));
+        assertFalse(Bloodtype.isValidBloodType("?"));
+        assertFalse(Bloodtype.isValidBloodType("BB"));
+        assertFalse(Bloodtype.isValidBloodType("BA"));
+        assertFalse(Bloodtype.isValidBloodType("A B"));
+        assertFalse(Bloodtype.isValidBloodType("A +"));
+        assertFalse(Bloodtype.isValidBloodType("A+ "));
+        assertFalse(Bloodtype.isValidBloodType(" A+"));
+
+        // valid blood types
+        assertTrue(Bloodtype.isValidBloodType("AB")); // all caps
+        assertTrue(Bloodtype.isValidBloodType("ab")); // all small letters
+        assertTrue(Bloodtype.isValidBloodType("aB")); // case insensitive
+        assertTrue(Bloodtype.isValidBloodType("O")); // one character
+        assertTrue(Bloodtype.isValidBloodType("B+")); // inclusive of + or - symbol
+
+        //Placeholder blood type if no input detected
+        assertTrue(Bloodtype.isValidBloodType(NON_COMPULSORY_BLOODTYPE));
+
+        //Potential weird cases which could be improved on in the future
+        assertTrue(Bloodtype.isValidBloodType("O+"));
+        assertTrue(Bloodtype.isValidBloodType("AB+"));
+        assertTrue(Bloodtype.isValidBloodType("ab+"));
+        assertTrue(Bloodtype.isValidBloodType("aB+"));
+
+
+    }
+}
+```
+###### /java/seedu/address/model/person/BloodtypeContainsKeywordPredicateTest.java
 ``` java
 public class BloodtypeContainsKeywordPredicateTest {
 
@@ -368,82 +465,7 @@ public class BloodtypeContainsKeywordPredicateTest {
     }
 }
 ```
-###### \java\seedu\address\model\person\BloodtypeTest.java
-``` java
-public class BloodtypeTest {
-
-    @Test
-    public void isValidBloodType() {
-        // invalid blood types
-        assertFalse(Bloodtype.isValidBloodType("")); // empty string
-        assertFalse(Bloodtype.isValidBloodType(" ")); // spaces only
-        assertFalse(Bloodtype.isValidBloodType("L")); // not one of twelve valid inputs
-        assertFalse(Bloodtype.isValidBloodType("cat")); // not one of twelve valid inputs
-        assertFalse(Bloodtype.isValidBloodType("$%")); // not one of twelve valid inputs
-        assertFalse(Bloodtype.isValidBloodType("ABCDE")); // more than three characters
-        assertFalse(Bloodtype.isValidBloodType("+")); // "+" or "-" alone
-        assertFalse(Bloodtype.isValidBloodType("-")); // "+" or "-" alone
-        assertFalse(Bloodtype.isValidBloodType("B++"));
-        assertFalse(Bloodtype.isValidBloodType("+B"));
-        assertFalse(Bloodtype.isValidBloodType("+F"));
-        assertFalse(Bloodtype.isValidBloodType("N"));
-        assertFalse(Bloodtype.isValidBloodType("?"));
-        assertFalse(Bloodtype.isValidBloodType("BB"));
-        assertFalse(Bloodtype.isValidBloodType("BA"));
-        assertFalse(Bloodtype.isValidBloodType("A B"));
-        assertFalse(Bloodtype.isValidBloodType("A +"));
-        assertFalse(Bloodtype.isValidBloodType("A+ "));
-        assertFalse(Bloodtype.isValidBloodType(" A+"));
-
-        // valid blood types
-        assertTrue(Bloodtype.isValidBloodType("AB")); // all caps
-        assertTrue(Bloodtype.isValidBloodType("ab")); // all small letters
-        assertTrue(Bloodtype.isValidBloodType("aB")); // case insensitive
-        assertTrue(Bloodtype.isValidBloodType("O")); // one character
-        assertTrue(Bloodtype.isValidBloodType("B+")); // inclusive of + or - symbol
-
-        //Placeholder blood type if no input detected
-        assertTrue(Bloodtype.isValidBloodType(NON_COMPULSORY_BLOODTYPE));
-
-        //Potential weird cases which could be improved on in the future
-        assertTrue(Bloodtype.isValidBloodType(NON_COMPULSORY_BLOODTYPE + "+"));
-        assertTrue(Bloodtype.isValidBloodType("O+"));
-        assertTrue(Bloodtype.isValidBloodType("AB+"));
-        assertTrue(Bloodtype.isValidBloodType("ab+"));
-        assertTrue(Bloodtype.isValidBloodType("aB+"));
-
-
-    }
-}
-```
-###### \java\seedu\address\model\person\RelationshipTest.java
-``` java
-public class RelationshipTest {
-
-    @Test
-    public void equals() {
-        Relationship relation = new Relationship("John Doe");
-
-        // same object -> returns true
-        assertTrue(relation.equals(relation));
-
-        // same values -> returns true
-        Relationship relationshipCopy = new Relationship(relation.value);
-        assertTrue(relation.equals(relationshipCopy));
-
-        // different types -> returns false
-        assertFalse(relation.equals(1));
-
-        // different person -> returns false
-        Relationship differentRelationship = new Relationship("Mary Jane");
-        assertFalse(relation.equals(differentRelationship));
-
-        // null
-        assertNotNull(relation);
-    }
-}
-```
-###### \java\seedu\address\testutil\EditPersonDescriptorBuilder.java
+###### /java/seedu/address/testutil/EditPersonDescriptorBuilder.java
 ``` java
     /**
      * Sets the {@code Bloodtype} of the {@code EditPersonDescriptor} that we are building.
@@ -457,7 +479,7 @@ public class RelationshipTest {
         return this;
     }
 ```
-###### \java\seedu\address\testutil\PersonBuilder.java
+###### /java/seedu/address/testutil/PersonBuilder.java
 ``` java
     /**
      * Sets the {@code Relationship} of the {@code Person} that we are building.
@@ -478,24 +500,4 @@ public class RelationshipTest {
         }
         return this;
     }
-```
-###### \java\systemtests\AddCommandSystemTest.java
-``` java
-        /* Case: invalid bloodtype -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-                + ADDRESS_DESC_AMY + INVALID_BLOODTYPE_DESC;
-        assertCommandFailure(command, Bloodtype.MESSAGE_BLOODTYPE_CONSTRAINTS);
-```
-###### \java\systemtests\EditCommandSystemTest.java
-``` java
-        /* Case: invalid bloodtype -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + INVALID_BLOODTYPE_DESC,
-                Bloodtype.MESSAGE_BLOODTYPE_CONSTRAINTS);
-```
-###### \java\systemtests\FindCommandSystemTest.java
-``` java
-        /* Case: find bloodtype of person in address book -> 0 persons found */
-        command = FindCommand.COMMAND_WORD + " " + DANIEL.getBloodType().type;
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
 ```
