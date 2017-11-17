@@ -11,7 +11,7 @@ import seedu.address.logic.commands.AddAppointmentCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Appointment;
 
-//@@author Eric
+//@@author EricLoh
 public class AddAppointmentParserTest {
 
     @Rule

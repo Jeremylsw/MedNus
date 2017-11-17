@@ -17,7 +17,7 @@ import seedu.address.model.person.AppointmentList;
 
 
 
-//@@author Eric
+//@@author EricLoh
 public class AppointmentListTest {
 
     @Test

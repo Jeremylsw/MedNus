@@ -15,7 +15,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.testutil.TypicalPersons;
 
-//@@author Eric
+//@@author EricLoh
 public class CancelAppointmentCommandTest {
 
     @Rule

@@ -6,7 +6,7 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-//@@author Eric
+//@@author EricLoh
 public class AppointmentTest {
 
     @Test
