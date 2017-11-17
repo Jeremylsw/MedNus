@@ -222,7 +222,7 @@ public class ParserUtilTest {
         assertEquals(expectedTagSet, actualTagSet);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void parseRemarkNullThrowsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);

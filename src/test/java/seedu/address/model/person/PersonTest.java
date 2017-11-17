@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import seedu.address.testutil.PersonBuilder;
 
-//@@author Jeremy
+//@@author Jeremylsw
 public class PersonTest {
 
     @Test

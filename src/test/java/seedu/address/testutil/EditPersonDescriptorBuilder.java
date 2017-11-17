@@ -100,7 +100,7 @@ public class EditPersonDescriptorBuilder {
     }
     //@@author
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * Sets the {@code Remark} of the {@code EditPersonDescriptor} that we are building.
      */

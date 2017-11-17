@@ -28,7 +28,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.testutil.PersonBuilder;
 
-//@@author Jeremy
+//@@author Jeremylsw
 public class RemarkCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());

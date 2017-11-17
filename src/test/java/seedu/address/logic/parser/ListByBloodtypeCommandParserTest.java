@@ -11,7 +11,7 @@ import org.junit.Test;
 import seedu.address.logic.commands.ListByBloodtypeCommand;
 import seedu.address.model.person.BloodtypeContainsKeywordPredicate;
 
-//@@author Jeremy
+//@@author Jeremylsw
 public class ListByBloodtypeCommandParserTest {
 
     private ListByBloodtypeCommandParser parser = new ListByBloodtypeCommandParser();
