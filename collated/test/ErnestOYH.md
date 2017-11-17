@@ -227,7 +227,9 @@ public class RelationshipCommandTest {
                         + keyword.stream().collect(Collectors.joining(" ")));
         assertEquals(new ListByBloodtypeCommand(new BloodtypeContainsKeywordPredicate(keyword)), command);
     }
-
+```
+###### \java\seedu\address\logic\parser\AddressBookParserTest.java
+``` java
     @Test
     public void parseCommandRelationship() throws Exception {
         final Relationship relation = new Relationship("Some relation.");
@@ -262,7 +264,9 @@ public class RelationshipCommandTest {
 
         assertEquals(expectedBloodType, actualBloodType.get());
     }
-
+```
+###### \java\seedu\address\logic\parser\ParserUtilTest.java
+``` java
     @Test
     public void parseRelationshipNullThrowsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);

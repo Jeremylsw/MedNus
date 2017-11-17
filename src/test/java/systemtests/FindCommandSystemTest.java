@@ -125,7 +125,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        //@@author Ernest
+        //@@author ErnestOYH
         /* Case: find bloodtype of person in address book -> 0 persons found */
         command = FindCommand.COMMAND_WORD + " " + DANIEL.getBloodType().type;
         assertCommandSuccess(command, expectedModel);
