@@ -64,7 +64,7 @@ public class PersonCard extends UiPart<Region> {
 
     }
 
-    //@@author Eric
+    //@@author EricLoh
     private void setStyle(int displayedIndex) {
         appointment.setStyle("-fx-font-weight: bold");
         color = displayedIndex % 2 == 0 ? PANE_COLOR_EVEN : PANE_COLOR_ODD;

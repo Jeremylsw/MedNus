@@ -186,7 +186,7 @@ public class Person implements ReadOnlyPerson {
     }
     //@@author
 
-    //@@author Eric
+    //@@author EricLoh
     @Override
     public ObjectProperty<AppointmentList> appointmentProperty() {
         return appointments;

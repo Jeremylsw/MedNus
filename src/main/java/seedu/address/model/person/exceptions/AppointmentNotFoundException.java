@@ -1,6 +1,6 @@
 package seedu.address.model.person.exceptions;
 
-//@@author Eric
+//@@author EricLoh
 /**
  * Signals that the appointment cannot be found
  */

@@ -151,7 +151,7 @@ public class UniquePersonList implements Iterable<Person> {
         return internalList.hashCode();
     }
 
-    //@@author Eric
+    //@@author EricLoh
     /**
      * Adds appointment to a person in the internal list.
      *
