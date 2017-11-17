@@ -363,8 +363,8 @@ A Bloodtype class is created with one constructor. +
 new Bloodtype("AB+")
 ....
 
-The constructor requires a string input with one to three character limit. "+" and "-" are allowed as Bloodtype +
-has a ascii regex. +
+The constructor requires a string input that accepts only 12 inputs that are case insentive. +
+Valid inputs are: A, A+, A-, B, B+, B-, O, O+, O-, AB, AB+, AB-. +
 
 As of version 1.1, Person constructor includes Bloodtype.
 
@@ -900,6 +900,43 @@ corresponding to the new function e.g. +
 This is for reasons of complying with a Facade design pattern (where CopyCommand is the facade) which is used throughout MedNus.
 This is important particularly in cases where we want to retain polymorphism (of the CopyCommand class) and support the Open-Closed principle. +
 // end::copy[]
+
+// tag::relationship[]
+
+=== *Enhancement: Relationship Command* +
+
+*Reason for implementation* +
+
+As MedNus is designed for doctors to use, being able to check the relationships of a patient +
+is very useful especially in emergency situation when contacting a patient's family and friends +
+are of utmost importance.
+
+*How it is implemented* +
+The immplementation involves two main segments Logic and Model. +
+
+The sequence diagram of the Relationship Command is shown in Figure 29 below. +
+
+image::SDforRelationshipCommand.png[width="800"]
+    Figure 29: Sequence Diagram for Relationship Command
+
+* Firstly, the AddressBookParser checks if there is anything after `relation`. +
+e.g 1 rel/Husband: John Doe
+* Secondly, the RemarkCommandParser parses the input `1 rel/Husband: John Doe`. +
+Parsed index: 1 +
+Parsed string: Husband: John Doe
+* Thirdly, a RelationshipCommand is created and the parsed index and string are passed as arguments. +
+The index and relationship is set locally and execution, which calls the model, is run.
+* Next, model is called and filtered persons list is gotten. +
+A new Person object is created with local relationship variable instantiated. +
+The filtered persons list is updated. +
+Model gets the updated filtered persons list.
+
+*Reason for how it is implemented* +
+
+The relationship command makes use of existing implementations to reduce potential bugs that +
+might surfaced when an entirely new code is added to the existing code.
+
+// end::relationship[]
 
 == Documentation
 
