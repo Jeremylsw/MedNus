@@ -58,7 +58,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         try {
             Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME)).get();
 
-            //@@author Jeremy
+            //@@author Jeremylsw
             Phone phone = (!arePrefixesPresent(argMultimap, PREFIX_PHONE))
                     ? new Phone(NON_COMPULSORY_PHONE)
                     : ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE)).get();

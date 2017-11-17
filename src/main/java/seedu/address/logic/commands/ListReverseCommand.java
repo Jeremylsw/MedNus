@@ -1,6 +1,6 @@
 package seedu.address.logic.commands;
 
-//@@author Jeremy
+//@@author Jeremylsw
 /**
  * Reverses existing displayed list
  */

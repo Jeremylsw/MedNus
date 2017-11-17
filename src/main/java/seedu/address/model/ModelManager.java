@@ -146,7 +146,7 @@ public class ModelManager extends ComponentManager implements Model {
     }
     //@@author
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * Returns an unmodifiable filtered ReadOnlyPerson list, filtered by name in ascending order.
      *
@@ -181,6 +181,7 @@ public class ModelManager extends ComponentManager implements Model {
         ObservableList<ReadOnlyPerson> list = addressBook.getPersonListReversed();
         return FXCollections.unmodifiableObservableList(list);
     }
+    //@@author
 
     //@@author rushan-khor
     /**

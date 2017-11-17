@@ -1,6 +1,6 @@
 package seedu.address.logic.commands;
 
-//@@author Jeremy
+//@@author Jeremylsw
 /**
  * Prints failure message if invalid arguments are passed after a list command
  *

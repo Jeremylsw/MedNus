@@ -11,7 +11,7 @@ import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Remark;
 
-//@@author Jeremy
+//@@author Jeremylsw
 /**
  * Parses input arguments and creates a new RemarkCommand object
  */
