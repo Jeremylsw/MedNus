@@ -94,7 +94,7 @@ public class CommandBoxTest extends GuiUnitTest {
         assertEquals(defaultStyleOfCommandBox, commandBoxHandle.getStyleClass());
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void handleKeyPressEscape() {
         //Command Box text field should contain nothing the first time

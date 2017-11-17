@@ -203,7 +203,7 @@ public class AddressBookParserTest {
         assertTrue(parser.parseCommand("undo 3") instanceof UndoCommand);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void parseCommandRemarkCommandWordReturnsRemarkCommand() throws Exception {
         //Create RemarkCommand up for testing

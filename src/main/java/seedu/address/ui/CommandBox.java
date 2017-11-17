@@ -75,7 +75,7 @@ public class CommandBox extends UiPart<Region> {
         }
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * Handles KeyPress Commands that are not keyed with Shift button held down.
      *
@@ -680,7 +680,7 @@ public class CommandBox extends UiPart<Region> {
         styleClass.add(ERROR_STYLE_CLASS);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * @return the text field for testing purposes
      */

@@ -11,7 +11,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 
 public class ToggleTagColorParserTest {
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 

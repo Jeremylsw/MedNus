@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 import seedu.address.model.tag.Tag;
 
-//@@author Jeremy
+//@@author Jeremylsw
 
 /**
  * Tests that a {@code ReadOnlyPerson}'s {@code Tag} matches any of the tag keywords given.

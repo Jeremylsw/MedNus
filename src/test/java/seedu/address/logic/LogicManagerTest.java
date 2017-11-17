@@ -51,7 +51,7 @@ public class LogicManagerTest {
         assertHistoryCorrect(listCommand);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void executeValidListByTagTest() {
         String listByTagCommand = ListByTagCommand.COMMAND_WORD + " colleagues";

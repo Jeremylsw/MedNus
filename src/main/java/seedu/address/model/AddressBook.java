@@ -243,7 +243,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         return persons.asObservableList();
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
 
     /**
      * Filters person list by name in ascending order.

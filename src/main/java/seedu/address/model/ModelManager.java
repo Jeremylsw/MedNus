@@ -143,7 +143,7 @@ public class ModelManager extends ComponentManager implements Model {
         indicateAddressBookChanged();
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * Returns an unmodifiable filtered ReadOnlyPerson list, filtered by name in ascending order.
      *

@@ -81,7 +81,7 @@ public class JsonUserPrefsStorageTest {
         assertEquals(expected, actual);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void testUserPrefsGetAddressBookName() {
         UserPrefs upUnderTest = getTypicalUserPrefs();

@@ -24,7 +24,7 @@ public class UniqueTagListTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void testThrowDuplicateTagError() throws Exception {
         UniqueTagList uniqueTagList = new UniqueTagList();
@@ -124,7 +124,7 @@ public class UniqueTagListTest {
     }
     //@@author
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void testEquals() {
         UniqueTagList uniqueTagList = new UniqueTagList();

@@ -75,7 +75,7 @@ public class XmlAddressBookStorage implements AddressBookStorage {
         XmlFileStorage.saveDataToFile(file, new XmlSerializableAddressBook(addressBook));
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
 
     /**
      * Saves a backup address book.
