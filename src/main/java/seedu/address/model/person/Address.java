@@ -23,7 +23,7 @@ public class Address {
 
     public final String value;
 
-    //@@author Ernest
+    //@@author ErnestOYH
     /**
      * Validates given address.
      *

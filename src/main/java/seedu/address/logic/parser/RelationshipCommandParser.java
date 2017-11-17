@@ -11,7 +11,7 @@ import seedu.address.logic.commands.RelationshipCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Relationship;
 
-//@@author Ernest
+//@@author ErnestOYH
 /**
  * Parses input arguments and creates a new RelationshipCommand object
  */

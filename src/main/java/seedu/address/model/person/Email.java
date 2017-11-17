@@ -18,7 +18,7 @@ public class Email {
 
     public final String value;
 
-    //@@author Ernest
+    //@@author ErnestOYH
     /**
      * Validates given email.
      *

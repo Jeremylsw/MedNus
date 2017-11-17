@@ -212,7 +212,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(address);
         }
 
-        //@@author Ernest
+        //@@author ErnestOYH
         public void setBloodType(Bloodtype bloodType) {
             this.bloodType = bloodType;
         }
