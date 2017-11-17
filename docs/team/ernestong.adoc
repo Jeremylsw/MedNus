@@ -10,8 +10,8 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. +
 It is written in Java, and has about 6 kLoC.
 
 *Code contributed*: +
-link:{collatedDir}/main/Ernest.md[Functional code] +
-link:{collatedDir}/test/Ernest.md[Test code] +
+link:{collatedDir}/main/ErnestOYH.md[Functional code] +
+link:{collatedDir}/test/ErnestOYH.md[Test code] +
 
 === Purpose
 
