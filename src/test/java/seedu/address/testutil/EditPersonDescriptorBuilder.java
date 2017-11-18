@@ -86,7 +86,7 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
-    //@@author Ernest
+    //@@author ErnestOYH
     /**
      * Sets the {@code Bloodtype} of the {@code EditPersonDescriptor} that we are building.
      */
@@ -100,7 +100,7 @@ public class EditPersonDescriptorBuilder {
     }
     //@@author
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * Sets the {@code Remark} of the {@code EditPersonDescriptor} that we are building.
      */

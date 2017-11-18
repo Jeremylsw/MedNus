@@ -27,7 +27,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Relationship;
 import seedu.address.testutil.PersonBuilder;
 
-//@@author Ernest
+//@@author ErnestOYH
 /**
   * Contains integration tests (interaction with the Model) and unit tests for RelationshipCommand.
   */

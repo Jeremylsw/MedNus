@@ -82,7 +82,7 @@ public class ParserUtil {
         return email.isPresent() ? Optional.of(new Email(email.get())) : Optional.empty();
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * Parses a {@code Optional<String> remark} into an {@code Optional<Remark>} if {@code remark} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
@@ -96,7 +96,7 @@ public class ParserUtil {
     }
     //@@author
 
-    //@@author Ernest
+    //@@author ErnestOYH
     /**
      * Parses a {@code Optional<String> bloodType} into an {@code Optional<Bloodtype>} if {@code bloodType} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.

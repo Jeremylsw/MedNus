@@ -1,4 +1,4 @@
-# Ernest
+# ErnestOYH
 ###### \java\seedu\address\logic\commands\EditCommand.java
 ``` java
         public void setBloodType(Bloodtype bloodType) {
@@ -396,7 +396,9 @@ public class BloodtypeContainsKeywordPredicate implements Predicate<ReadOnlyPers
     public Bloodtype getBloodType() {
         return bloodType.get();
     }
-
+```
+###### \java\seedu\address\model\person\Person.java
+``` java
     public void setRelationship(Relationship relation) {
         this.relation.set(requireNonNull(relation));
     }

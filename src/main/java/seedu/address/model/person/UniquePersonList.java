@@ -102,7 +102,7 @@ public class UniquePersonList implements Iterable<Person> {
         return FXCollections.unmodifiableObservableList(mappedList);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     /**
      * @return the list as an unmodifiable list and sorted by name in ascending order
      */
@@ -151,7 +151,7 @@ public class UniquePersonList implements Iterable<Person> {
         return internalList.hashCode();
     }
 
-    //@@author Eric
+    //@@author EricLoh
     /**
      * Adds appointment to a person in the internal list.
      *

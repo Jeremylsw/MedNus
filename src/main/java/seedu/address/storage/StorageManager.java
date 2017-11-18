@@ -78,7 +78,7 @@ public class StorageManager extends ComponentManager implements Storage {
         addressBookStorage.saveAddressBook(addressBook, filePath);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
 
     /**
      * Saves a backup of the address book.

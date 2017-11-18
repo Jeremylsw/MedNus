@@ -15,7 +15,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 
 
-//@@author Eric
+//@@author EricLoh
 public class AppointmentSystemTest extends AddressBookSystemTest {
 
     @Test

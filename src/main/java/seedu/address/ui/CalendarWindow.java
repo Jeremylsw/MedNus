@@ -25,7 +25,7 @@ import seedu.address.commons.events.ui.CalendarViewEvent;
 import seedu.address.model.person.Appointment;
 import seedu.address.model.person.ReadOnlyPerson;
 
-//@@author Eric
+//@@author EricLoh
 /**
  * The Browser Panel of the App.
  */

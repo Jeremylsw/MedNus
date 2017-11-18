@@ -6,7 +6,7 @@ import static seedu.address.logic.commands.CommandTestUtil.NON_COMPULSORY_BLOODT
 
 import org.junit.Test;
 
-//@@author Ernest
+//@@author ErnestOYH
 public class BloodtypeTest {
 
     @Test

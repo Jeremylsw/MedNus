@@ -14,7 +14,7 @@ import seedu.address.model.person.Relationship;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 
-//@@author Ernest
+//@@author ErnestOYH
 /**
   * Changes the relationship of an existing person in the address book.
   */

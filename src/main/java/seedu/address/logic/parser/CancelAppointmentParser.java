@@ -7,7 +7,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 
-//@@author
+//@@author EricLoh
 /**
  * Parse input arguments and create a new CancelAppointmentCommand Object
  */

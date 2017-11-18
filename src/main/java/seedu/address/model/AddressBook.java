@@ -58,7 +58,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.persons.setPersons(persons);
     }
 
-    //@@author Eric
+    //@@author EricLoh
     public void setTags(Set<Tag> tags, String tagString, String color) {
         this.tags.setTags(tags, tagString, color);
     }
@@ -243,7 +243,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         return persons.asObservableList();
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
 
     /**
      * Filters person list by name in ascending order.

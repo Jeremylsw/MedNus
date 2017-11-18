@@ -7,7 +7,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 
-//@@author Eric
+//@@author EricLoh
 
 /**
  * Parser for CalendarViewCommand

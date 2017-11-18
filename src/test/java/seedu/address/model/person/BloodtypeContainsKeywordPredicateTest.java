@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import seedu.address.testutil.PersonBuilder;
 
-//@@author Ernest
+//@@author ErnestOYH
 public class BloodtypeContainsKeywordPredicateTest {
 
     @Test

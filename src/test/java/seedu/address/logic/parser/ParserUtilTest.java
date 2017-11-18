@@ -145,7 +145,7 @@ public class ParserUtilTest {
         assertEquals(expectedAddress, actualAddress.get());
     }
 
-    //@@author Ernest
+    //@@author ErnestOYH
     @Test
     public void parseBloodTypeNullThrowsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);
@@ -222,7 +222,7 @@ public class ParserUtilTest {
         assertEquals(expectedTagSet, actualTagSet);
     }
 
-    //@@author Jeremy
+    //@@author Jeremylsw
     @Test
     public void parseRemarkNullThrowsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);
@@ -243,7 +243,7 @@ public class ParserUtilTest {
     }
     //@@author
 
-    //@@author Ernest
+    //@@author ErnestOYH
     @Test
     public void parseRelationshipNullThrowsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);

@@ -48,7 +48,7 @@ public class UniqueTagList implements Iterable<Tag> {
         return new HashSet<>(internalList);
     }
 
-    //@@author Eric
+    //@@author EricLoh
     /**
      * Replaces the Tags in this list with those in the argument tag list.
      */
@@ -73,13 +73,14 @@ public class UniqueTagList implements Iterable<Tag> {
         internalList.setAll(tags);
     }
     //@@author
+
     public void setTags(Set<Tag> tags) {
         requireAllNonNull(tags);
         internalList.setAll(tags);
         assert CollectionUtil.elementsAreUnique(internalList);
     }
 
-    //@@author Eric
+    //@@author EricLoh
     private void setOffColor(Set<Tag> tags) {
         for (Tag tag : tags) {
             tag.setOffColor();
@@ -101,6 +102,7 @@ public class UniqueTagList implements Iterable<Tag> {
         }
     }
     //@@author
+
     /**
      * Ensures every tag in the argument list exists in this object.
      */
