@@ -1,4 +1,4 @@
-# Eric
+# EricLoh
 ###### \java\seedu\address\logic\commands\AddAppointmentCommandTest.java
 ``` java
 public class AddAppointmentCommandTest {

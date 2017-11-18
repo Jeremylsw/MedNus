@@ -37,7 +37,7 @@ public class UniquePersonListTest {
         uniquePersonList.remove(TypicalPersons.ALICE);
     }
 
-    //@@author Eric
+    //@@author EricLoh
     @Test
     public void addAppointmentThrowsNoPersonFoundException() throws PersonNotFoundException {
         UniquePersonList uniquePersonList = new UniquePersonList();

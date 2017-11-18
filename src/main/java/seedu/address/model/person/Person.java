@@ -116,7 +116,7 @@ public class Person implements ReadOnlyPerson {
         return address.get();
     }
 
-    //@@author Ernest
+    //@@author ErnestOYH
     public void setBloodType(Bloodtype bloodType) {
         this.bloodType.set(requireNonNull(bloodType));
     }
@@ -170,7 +170,7 @@ public class Person implements ReadOnlyPerson {
         return remark.get();
     }
 
-    //@@author Ernest
+    //@@author ErnestOYH
     public void setRelationship(Relationship relation) {
         this.relation.set(requireNonNull(relation));
     }
@@ -186,7 +186,7 @@ public class Person implements ReadOnlyPerson {
     }
     //@@author
 
-    //@@author Eric
+    //@@author EricLoh
     @Override
     public ObjectProperty<AppointmentList> appointmentProperty() {
         return appointments;

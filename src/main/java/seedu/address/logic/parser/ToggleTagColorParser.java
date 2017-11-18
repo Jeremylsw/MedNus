@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import seedu.address.logic.commands.ToggleTagColorCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
-//@@author Eric
+//@@author EricLoh
 /**
  * Parse input for tagcolor command
  */

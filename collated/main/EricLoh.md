@@ -1,4 +1,4 @@
-# Eric
+# EricLoh
 ###### \java\seedu\address\commons\events\ui\CalendarViewEvent.java
 ``` java
 /**
@@ -414,6 +414,28 @@ public class CalendarViewParser implements Parser {
             return false;
         }
     }
+}
+```
+###### \java\seedu\address\logic\parser\CancelAppointmentParser.java
+``` java
+
+/**
+ * Parse input arguments and create a new CancelAppointmentCommand Object
+ */
+public class CancelAppointmentParser implements Parser {
+    @Override
+    public Command parse(String userInput) throws ParseException {
+        if (!userInput.contains("with")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    CancelAppointmentCommand.MESSAGE_USAGE));
+        }
+        String description = userInput.substring(0, userInput.indexOf("with") - 1);
+        String personName = userInput.substring(userInput.indexOf("with") + 5);
+
+        return new CancelAppointmentCommand(personName, description);
+    }
+
+
 }
 ```
 ###### \java\seedu\address\logic\parser\ToggleTagColorParser.java

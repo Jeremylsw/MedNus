@@ -24,7 +24,7 @@ public class Tag {
     public final String tagName;
     private String tagColor;
 
-    //@@author Eric
+    //@@author EricLoh
     /**
      * Validates given tag name.
      *
@@ -91,7 +91,7 @@ public class Tag {
         return '[' + tagName + ']';
     }
 
-    //@@author Eric
+    //@@author EricLoh
     /**
      * Converts a color to hexadecimal string
      *
@@ -99,4 +99,5 @@ public class Tag {
     private static String convertColorToHexadecimal(Color color) {
         return String.format("#%06x", color.getRGB() & 0x00FFFFFF);
     }
+    //@@author
 }

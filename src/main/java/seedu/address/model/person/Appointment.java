@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-//@@author Eric
+//@@author EricLoh
 /**
  *  Appointment class to hold all the start and end time of the appointment and the description
  *  */

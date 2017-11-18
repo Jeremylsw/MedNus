@@ -21,7 +21,7 @@ public class Name {
 
     public final String fullName;
 
-    //@@author Ernest
+    //@@author ErnestOYH
     /**
      * Validates given name.
      *

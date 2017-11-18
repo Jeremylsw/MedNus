@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import seedu.address.testutil.TypicalPersons;
 
-//@@author Eric
+//@@author EricLoh
 public class CalendarWindowTest extends GuiUnitTest {
 
     private CalendarWindow calendarWindow;

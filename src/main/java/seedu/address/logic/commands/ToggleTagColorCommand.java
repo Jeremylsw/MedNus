@@ -7,7 +7,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.tag.Tag;
 
-//@@author Eric
+//@@author EricLoh
 /**
  *  Changes tag color in address book
  */

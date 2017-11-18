@@ -10,7 +10,7 @@ import seedu.address.logic.commands.CancelAppointmentCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 
-//@@author Eric
+//@@author EricLoh
 public class CancelAppointmentParserTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();

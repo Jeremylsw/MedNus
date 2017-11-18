@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import seedu.address.model.person.Appointment;
 
-//@@author Eric
+//@@author EricLoh
 /**
  * AXB-friendly version of the appointment list of a person
  */

@@ -1,6 +1,6 @@
 package seedu.address.logic.commands;
 
-//@@author Eric
+//@@author EricLoh
 import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.events.ui.CalendarViewEvent;
 import seedu.address.logic.commands.exceptions.CommandException;

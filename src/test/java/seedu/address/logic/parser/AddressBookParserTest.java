@@ -85,7 +85,7 @@ public class AddressBookParserTest {
         assertTrue(command.equals(new AddAppointmentCommand(Index.fromOneBased(1), appointment)));
     }
 
-    //@@author Ernest
+    //@@author ErnestOYH
     @Test
     public void parseCommandListByBloodtype() throws Exception {
         List<String> keyword = Arrays.asList("A+", "ab", "O-");
@@ -220,7 +220,7 @@ public class AddressBookParserTest {
     }
     //@@author
 
-    //@@author Ernest
+    //@@author ErnestOYH
     @Test
     public void parseCommandRelationship() throws Exception {
         final Relationship relation = new Relationship("Some relation.");

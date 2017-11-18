@@ -10,7 +10,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-//@@author Eric
+//@@author EricLoh
 /**
  * A list of appointments of a person
  */

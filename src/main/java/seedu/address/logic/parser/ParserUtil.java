@@ -96,7 +96,7 @@ public class ParserUtil {
     }
     //@@author
 
-    //@@author Ernest
+    //@@author ErnestOYH
     /**
      * Parses a {@code Optional<String> bloodType} into an {@code Optional<Bloodtype>} if {@code bloodType} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
