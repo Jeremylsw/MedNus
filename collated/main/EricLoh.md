@@ -1,4 +1,4 @@
-# Eric
+# EricLoh
 ###### \java\seedu\address\commons\events\ui\CalendarViewEvent.java
 ``` java
 /**
